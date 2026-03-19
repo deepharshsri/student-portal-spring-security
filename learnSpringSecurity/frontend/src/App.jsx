@@ -186,7 +186,7 @@ function StudentPage({ token, onLogout }) {
     setLoading(true);
     try {
       const [allRes, myRes] = await Promise.all([
-        fetch(`${BASE}/courses`,            { headers: authHeaders(token) }),
+        fetch(`${BASE}/students/courses`,            { headers: authHeaders(token) }),
         fetch(`${BASE}/students/me/courses`, { headers: authHeaders(token) }),
       ]);
       setAllCourses(await allRes.json());
@@ -281,8 +281,8 @@ function AdminPage({ token, onLogout }) {
 
   async function addCourse() {
     if (!newCourseName.trim()) return;
-    await fetch(`${BASE}/courses`, { method: "POST", headers: authHeaders(token), body: JSON.stringify({ courseName: newCourseName }) });
-    setNewCourseName("");
+    await fetch(`${BASE}/admin/courses`, { method: "POST", headers: authHeaders(token), body: JSON.stringify({ courseName: newCourseName }) });
+    setNewCourse("");
     setAddMsg("Course added!");
     setTimeout(() => setAddMsg(""), 2000);
     loadCourses();

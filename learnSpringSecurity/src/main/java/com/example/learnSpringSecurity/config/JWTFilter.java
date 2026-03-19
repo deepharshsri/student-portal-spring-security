@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.learnSpringSecurity.Service.AuthService;
@@ -20,11 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
+@Component
 public class JWTFilter extends OncePerRequestFilter{
     
     @Autowired
-    AuthService authService;
-
+    JwtServiceImpl jwtServiceImpl;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, 
@@ -34,7 +35,7 @@ public class JWTFilter extends OncePerRequestFilter{
 
         String token=extractTokenFromHeader(request);
         if(token!=null){
-         UserDetails userDetails=authService.validateToken(token);
+         UserDetails userDetails=jwtServiceImpl.validateToken(token);
          UsernamePasswordAuthenticationToken authentication=new UsernamePasswordAuthenticationToken(
                                                                  userDetails,
                                                                  null,

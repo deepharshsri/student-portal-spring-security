@@ -29,7 +29,7 @@ import com.example.learnSpringSecurity.Service.StudentService;
 import com.example.learnSpringSecurity.Service.Implementation.CourseService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/students")
 public class studentController {
     
   
@@ -45,7 +45,7 @@ public class studentController {
     //     return new ResponseEntity<>(studentService.getAllStudents(pageable),HttpStatus.OK);
     // } 
 
-    @GetMapping("/students/me/courses")
+    @GetMapping("/me/courses")
     public ResponseEntity<List<Course>> findStudent(Authentication authentication){
     
     String email=authentication.getClass().getName();

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.example.learnSpringSecurity.Repository.StudentRepo;
 import com.example.learnSpringSecurity.Security.StudentDetailsService;
 import com.example.learnSpringSecurity.Service.AuthService;
+import com.example.learnSpringSecurity.config.JwtService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -25,7 +26,7 @@ import io.jsonwebtoken.security.Keys;
 
 
 @Service
-public class AuthServiceImpl  implements AuthService {
+public class AuthServiceImpl  implements AuthService,JwtService {
     
     @Autowired
     AuthenticationManager authenticationManager;
@@ -68,7 +69,7 @@ public class AuthServiceImpl  implements AuthService {
                 .compact();
             }
 
-    private Key getSignKey(){
+    public Key getSignKey(){
 
       byte[] key=secretKey.getBytes();
       return Keys.hmacShaKeyFor(key);
@@ -81,7 +82,7 @@ public class AuthServiceImpl  implements AuthService {
         
     }
 
-    private String extractToken(String token) {
+    public String extractToken(String token) {
        
         Claims claims =Jwts.parserBuilder()
                        .setSigningKey(getSignKey())
