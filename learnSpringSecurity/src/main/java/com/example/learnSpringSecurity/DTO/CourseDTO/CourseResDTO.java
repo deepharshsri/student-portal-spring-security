@@ -20,7 +20,7 @@ public class CourseResDTO {
     
         public String courseName;  
         
-        public Page<Student> students;
+        public List<Student> students;
         
      
 }

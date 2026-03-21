@@ -1,5 +1,7 @@
 package com.example.learnSpringSecurity.Security;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,8 +22,8 @@ public class StudentDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         
 
-        Student student= studentRepo.findByEmail(username);
-        return new StudentDetails(student);
+        Optional<Student> student= studentRepo.findByEmail(username);
+        return student.map(StudentDetails::new).orElseThrow(()-> new UsernameNotFoundException("usename not found"));
     }
     
 }

@@ -1,8 +1,9 @@
 package com.example.learnSpringSecurity.Repository;
 
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,7 @@ import com.example.learnSpringSecurity.Entity.Student;
 public interface StudentRepo extends JpaRepository<Student, Long> {
     
     @Query("select s from Student s join s.courses c where c.courseId = :courseId")
-    Page<Student> findByCourseId(@Param("courseId") Long courseId, Pageable pageable);
+    List<Student> findByCourseId(@Param("courseId") Long courseId);
     
-    Student findByEmail(String email);
+    Optional<Student> findByEmail(String email);
 }

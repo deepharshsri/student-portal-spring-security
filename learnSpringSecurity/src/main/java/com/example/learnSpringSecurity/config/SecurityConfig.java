@@ -36,7 +36,8 @@ public class SecurityConfig {
             .authorizeHttpRequests((authz) -> authz
                  .requestMatchers(HttpMethod.GET,"/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST,"/students").permitAll()
+                .requestMatchers(HttpMethod.POST, "/students").permitAll() 
+                .requestMatchers(HttpMethod.GET,"/students/**").authenticated()
                 .requestMatchers(HttpMethod.GET,"/courses").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()) // security rules
@@ -53,7 +54,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfig() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowedOrigins(List.of("http://localhost:5173")); // ← React URL
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH"));
     config.setAllowedHeaders(List.of("*"));
     return request -> config;
     }

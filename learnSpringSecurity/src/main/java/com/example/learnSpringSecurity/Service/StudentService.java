@@ -1,5 +1,6 @@
 package com.example.learnSpringSecurity.Service;
 
+import com.example.learnSpringSecurity.controller.studentController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.learnSpringSecurity.DTO.StudentDTO.StudentReqDTO;
@@ -19,16 +21,21 @@ import com.example.learnSpringSecurity.Repository.StudentRepo;
 @Service
 public class StudentService {
     
+
+
 @Autowired
 private StudentRepo studentRepo;
 
 @Autowired
 private CourseRepo courseRepo;
 
-public Page<Student> getAllStudents(Pageable pageable) {
-    return studentRepo.findAll(pageable);
+
+
+public List<Student> getAllStudents(Long courseId) {
+    return studentRepo.findByCourseId(courseId);
 
 }
+
 
 public StudentResDTO createStudent(StudentReqDTO studentReqDto){
    
@@ -74,11 +81,33 @@ public StudentResDTO getStudentById(Long studentId){
 
 public List<Course> getCourses(String email) {
     // TODO Auto-generated method stub
-   return new ArrayList<>(studentRepo.findByEmail(email).getCourses());
+    
+     Optional<Student> student= studentRepo.findByEmail(email);
+
+     return student.map(s->{
+        return s.getCourses();
+     }).orElse(new ArrayList<>());
+
+    }
+
+
+public void addCourseById(String email, Long courseId) {
+    // TODO Auto-generated method stub
+        Optional<Student> student=studentRepo.findByEmail(email);
+        
+        if(student.isPresent()){
+        List<Course> courses=student.get().getCourses();
+        courses.add(courseRepo.findByCourseId(courseId));
+        student.get().setCourses(courses);
+        studentRepo.save(student.get());
+        }
 }
+   
+}
+
+
 
 // public Page<Course> getCoursesByStudentid(Long studentId,Pageable pageable){
 //     return courseRepo.findByStudentId(studentId, pageable);
 // }
 
-}

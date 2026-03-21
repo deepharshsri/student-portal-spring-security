@@ -38,7 +38,7 @@ public class courseAdminController {
     
     
 
-  
+ 
 
     @PostMapping("/admin/courses")
     public ResponseEntity<CourseResDTO> courseName(@RequestBody CourseReqDTO courseReqDto){
@@ -47,24 +47,24 @@ public class courseAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.createCourse(courseReqDto));
     }
 
-    @PutMapping("/{courseId}")
-    public ResponseEntity<CourseResDTO> updateCourse(@PathVariable Long courseId, @RequestBody CourseReqDTO courseReqDto,   Pageable pageable){
-      return new ResponseEntity<>(courseService.updateCourse(courseId,courseReqDto,pageable),HttpStatus.OK);
-    }
+    // @PutMapping("/{courseId}")
+    // public ResponseEntity<CourseResDTO> updateCourse(@PathVariable Long courseId, @RequestBody CourseReqDTO courseReqDto,   Pageable pageable){
+    //   return new ResponseEntity<>(courseService.updateCourse(courseId,courseReqDto,pageable),HttpStatus.OK);
+    // }
     
-    @PatchMapping("/{courseId}")
-    public ResponseEntity<CourseResDTO> updateCoursePartially(@PathVariable Long courseId, @RequestBody CourseReqDTO courseReqDto,Pageable pageable){
-        return new ResponseEntity<>(courseService.updateCoursePartially(courseId,courseReqDto,pageable),HttpStatus.OK);
-    }
+    // @PatchMapping("/{courseId}")
+    // public ResponseEntity<CourseResDTO> updateCoursePartially(@PathVariable Long courseId, @RequestBody CourseReqDTO courseReqDto,Pageable pageable){
+    //     return new ResponseEntity<>(courseService.updateCoursePartially(courseId,courseReqDto,pageable),HttpStatus.OK);
+    // }
 
-    @DeleteMapping("/{courseId}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long courseId){
+    // @DeleteMapping("/{courseId}")
+    // public ResponseEntity<Void> deleteCourse(@PathVariable Long courseId){
         
-        courseService.deleteCourse(courseId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    //     courseService.deleteCourse(courseId);
+    //     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    // }
     
-    @GetMapping("/{courseId}")
+    @GetMapping("{courseId}")
     public ResponseEntity<CourseResDTO> getCourseById(@PathVariable Long courseId,Pageable pageable){
         return new ResponseEntity<>(courseService.getCourseById(courseId,pageable),HttpStatus.OK);
     }

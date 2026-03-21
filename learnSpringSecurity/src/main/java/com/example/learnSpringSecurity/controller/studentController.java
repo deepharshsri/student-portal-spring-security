@@ -2,14 +2,16 @@ package com.example.learnSpringSecurity.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Authentication;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.learnSpringSecurity.DTO.StudentDTO.StudentReqDTO;
@@ -29,7 +32,7 @@ import com.example.learnSpringSecurity.Service.StudentService;
 import com.example.learnSpringSecurity.Service.Implementation.CourseService;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping
 public class studentController {
     
   
@@ -40,15 +43,18 @@ public class studentController {
     @Autowired 
     private CourseService courseService;
 
+    
+
     // @GetMapping
     // public ResponseEntity<Page<Student>> getAllStudents(Pageable pageable){
     //     return new ResponseEntity<>(studentService.getAllStudents(pageable),HttpStatus.OK);
     // } 
 
-    @GetMapping("/me/courses")
-    public ResponseEntity<List<Course>> findStudent(Authentication authentication){
+    @GetMapping("/students/me/courses")
+    public ResponseEntity<List<Course>> getStudent(Authentication authentication){
     
-    String email=authentication.getClass().getName();
+    String email=authentication.getName();
+    System.out.print(email);
     return ResponseEntity.ok(studentService.getCourses(email));
     }
 
@@ -58,7 +64,14 @@ public class studentController {
     
     return ResponseEntity.ok(new ArrayList<>(courseService.getAllCourses()));
     }
-
+    
+    @PostMapping("/students/me/enroll/{courseId}")
+    public void addCourseById(@PathVariable Long courseId,Authentication authentication){
+     String email=authentication.getName();
+     System.out.print(email);
+     studentService.addCourseById(email,courseId);
+    }
+    
     @PostMapping
     public ResponseEntity<StudentResDTO> createStudent(@RequestBody StudentReqDTO studentReqDTo){
 
@@ -83,9 +96,11 @@ public class studentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{studentId}")
-    public ResponseEntity<StudentResDTO> getStudentById(@PathVariable Long studentId){
-        return new ResponseEntity<>(studentService.getStudentById(studentId),HttpStatus.OK);
+    @GetMapping("/courses/{courseId}/students")
+    public ResponseEntity<List<Student>> getStudentByCourseId(@PathVariable Long courseId){
+     
+        return ResponseEntity.ok(studentService.getAllStudents(courseId));
+
     }
 
  

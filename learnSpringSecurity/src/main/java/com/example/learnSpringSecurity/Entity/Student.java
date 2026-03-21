@@ -1,11 +1,8 @@
 package com.example.learnSpringSecurity.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.engine.internal.Cascade;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -24,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Builder
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Student {
@@ -37,10 +33,15 @@ public class Student {
     private String password;
     private String role;
 
-   
-    @ManyToMany(mappedBy = "students")
-    @JsonIgnore
-    List<Course> courses;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+        name = "student_course",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )   
+    
+    @Builder.Default
+    List<Course> courses =new ArrayList<>();
 
     // Getters and Setters
  

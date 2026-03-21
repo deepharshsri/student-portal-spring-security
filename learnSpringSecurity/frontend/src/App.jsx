@@ -186,7 +186,7 @@ function StudentPage({ token, onLogout }) {
     setLoading(true);
     try {
       const [allRes, myRes] = await Promise.all([
-        fetch(`${BASE}/students/courses`,            { headers: authHeaders(token) }),
+        fetch(`${BASE}/courses`,            { headers: authHeaders(token) }),
         fetch(`${BASE}/students/me/courses`, { headers: authHeaders(token) }),
       ]);
       setAllCourses(await allRes.json());
